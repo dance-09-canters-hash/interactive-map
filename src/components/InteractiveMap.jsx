@@ -113,6 +113,8 @@ function InteractiveMap({ currentView }) {
         const mapUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
         const geoData = await d3.json(mapUrl)
 
+        if (!isMounted) return
+
         const mapFeatures = topojson.feature(geoData, geoData.objects.states)
         mapFeaturesRef.current = mapFeatures
         const borders = topojson.mesh(geoData, geoData.objects.states, (a, b) => a !== b)
@@ -145,6 +147,7 @@ function InteractiveMap({ currentView }) {
           .attr("d", pathRef.current(borders))
 
       } catch (error) {
+        if (!isMounted) return
         console.error("Error loading maps:", error)
       }
     }
