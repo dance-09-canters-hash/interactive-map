@@ -15,6 +15,7 @@ function InteractiveMap({ currentView }) {
   const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
+    let isMounted = true
     const container = containerRef.current
     if (!container) return
 
@@ -151,8 +152,13 @@ function InteractiveMap({ currentView }) {
           .attr("d", pathRef.current(borders))
 
       } catch (err) {
+        if (!isMounted) return
         console.error("Error loading maps:", err)
         setError(err.message || "Failed to load map data")
+      } finally {
+        if (isMounted) {
+          setLoading(false)
+        }
       }
     }
 
@@ -170,6 +176,7 @@ function InteractiveMap({ currentView }) {
     window.addEventListener('resize', handleResize)
 
     return () => {
+      isMounted = false
       window.removeEventListener('resize', handleResize)
     }
   }, [currentView, retryCount])
@@ -231,7 +238,7 @@ function InteractiveMap({ currentView }) {
             <h3 className="text-xl font-bold mb-2">Failed to Load Map</h3>
             <p className="text-gray-300 mb-4">{error}</p>
             <button
-              onClick={handleRetry
+              onClick={handleRetry}
               className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md font-semibold transition-colors"
             >
               Retry
