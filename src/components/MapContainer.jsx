@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import InteractiveMap from './InteractiveMap'
 
 function MapContainer() {

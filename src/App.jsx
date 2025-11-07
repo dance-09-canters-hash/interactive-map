@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import MapContainer from './components/MapContainer'
 
 function App() {

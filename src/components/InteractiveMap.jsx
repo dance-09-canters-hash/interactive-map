@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import * as topojson from 'topojson-client'
+import PropTypes from 'prop-types'
 
 function InteractiveMap({ currentView }) {
   const containerRef = useRef(null)
@@ -164,12 +165,12 @@ function InteractiveMap({ currentView }) {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [currentView])
 
   useEffect(() => {
     if (!zoomRef.current || !mapFeaturesRef.current) return
 
-    const { svg, zoom, g, width, height } = zoomRef.current
+    const { svg, zoom, width, height } = zoomRef.current
     activeRef.current.classed("active", false)
     activeRef.current = d3.select(null)
 
@@ -199,6 +200,10 @@ function InteractiveMap({ currentView }) {
   }, [currentView])
 
   return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+}
+
+InteractiveMap.propTypes = {
+  currentView: PropTypes.string.isRequired,
 }
 
 export default InteractiveMap
